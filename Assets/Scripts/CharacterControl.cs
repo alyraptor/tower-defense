@@ -9,8 +9,10 @@ public class CharacterControl : MonoBehaviour {
 	public float gravity = 40.0f;
 	public Vector3 unitSpeed;
 	public float magnitude;
+	public GameObject towerPrefab;
 
 	private CharacterController controller;
+	private Build playerBuildComponent;
 	private Vector3 moveDirection = Vector3.zero;
 
 	void Awake() {
@@ -19,6 +21,7 @@ public class CharacterControl : MonoBehaviour {
 
 	void SetInitialReferences() {
 		controller = GetComponent<CharacterController>();
+		playerBuildComponent = GetComponent<Build>();
 	}
 
 	void Update() {
@@ -34,6 +37,14 @@ public class CharacterControl : MonoBehaviour {
 			
 			if (Input.GetButton("Jump")) {
 				moveDirection.y = jumpSpeed;
+			}
+
+			if (Input.GetButtonDown("Fire1")) {
+				if(playerBuildComponent != null) {
+
+					playerBuildComponent.BuildStructure(transform.position, transform.rotation, towerPrefab);
+
+				}
 			}
 		} else {
 			moveDirection.x = (Input.GetAxis("Horizontal") * inAirSpeed);
