@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour {
 	public int attackRange;
 	public GameObject weapon;
 
+	private Entity entityComponent;
 	private Attack attackComponent;
 
 	private UnityEngine.AI.NavMeshAgent nav;
@@ -17,14 +18,17 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void Update() {
-		FindTarget();
-		MoveToTarget(targetsList[0].transform.position);
-		if(Vector3.Distance(targetsList[0].transform.position, transform.position) < attackRange) {
-			AttackTarget(targetsList[0]);
+		if(entityComponent.enabled) {
+			FindTarget();
+			MoveToTarget(targetsList[0].transform.position);
+			if(Vector3.Distance(targetsList[0].transform.position, transform.position) < attackRange) {
+				AttackTarget(targetsList[0]);
+			}
 		}
 	}
 
 	void SetInitialReferences() {
+		entityComponent = transform.GetComponent<Entity>();
 		attackComponent = transform.GetComponent<Attack>();
 		nav = GetComponent<UnityEngine.AI.NavMeshAgent>();
 	}

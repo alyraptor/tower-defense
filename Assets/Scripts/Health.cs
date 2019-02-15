@@ -59,6 +59,7 @@ public class Health : MonoBehaviour {
 	}
 
 	public void Die() {
+		// Separate out and check whether GO is player
 		Destroy(gameObject);
 	}
 

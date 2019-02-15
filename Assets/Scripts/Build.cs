@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Build : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+	public void BuildStructure(Vector3 spawnLocation, Quaternion spawnRotation, GameObject spawnPrefab) {
+
+		float spawnY = spawnPrefab.GetComponent<BoxCollider>().size.y;
+		Vector3 spawnOffset = spawnLocation - new Vector3(0, spawnY / 2, 0);
+		spawnLocation = spawnLocation + new Vector3(0, spawnY / 2, 0);
+
+		GameObject structureGO = (GameObject)Instantiate(spawnPrefab, spawnOffset, spawnRotation);
+
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }
