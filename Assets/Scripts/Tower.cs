@@ -9,6 +9,7 @@ public class Tower : MonoBehaviour {
 	public Vector3 spawnOffset = new Vector3(0f, .25f, 0f);
 	
 	private Transform towerTransform;
+	private Entity entityComponent;
 	private Attack attackComponent;
 
 	private List<GameObject> targets;
@@ -32,27 +33,30 @@ public class Tower : MonoBehaviour {
 	}
 
 	void SetInitialReferences() {
+		entityComponent = transform.GetComponent<Entity>();
 		attackComponent = transform.GetComponent<Attack>();
 	}
 
 	void Update () {
-		targets = attackComponent.FindTargets(true, 10);
-		if(targets.Count > 0) {
+		if(entityComponent.enabled) {
+			targets = attackComponent.FindTargets(true, 10);
+			if(targets.Count > 0) {
 
-			PointAt(targets[0]);
+				PointAt(targets[0]);
 
-			// fireCooldownLeft -= Time.deltaTime;
-			// if(fireCooldownLeft <= 0 && direction.magnitude <= range) {
-			// 	fireCooldownLeft = fireCooldown;
-			// 	Fire(targets[0], projectilePrefab);
-			// }
+				fireCooldownLeft -= Time.deltaTime;
+				if(fireCooldownLeft <= 0 && direction.magnitude <= range) {
+					fireCooldownLeft = fireCooldown;
+					Fire(targets[0], projectilePrefab);
+				}
+			}
 		}
 	}
 
 	void PointAt(GameObject target) {
 		direction = target.transform.position - this.transform.position;
 		Quaternion lookRot = Quaternion.LookRotation( direction );
-		transform.rotation = Quaternion.Euler( -90, lookRot.eulerAngles.y + 90, 0 );
+		transform.rotation = Quaternion.Euler( 0, lookRot.eulerAngles.y + 90, 0 );
 	}
 
 	void Fire(GameObject target, GameObject projectile) {
