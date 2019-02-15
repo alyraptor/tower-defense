@@ -30,13 +30,6 @@ public class Attack : MonoBehaviour {
 		targets.Sort(delegate(GameObject c1, GameObject c2) {
 			float c1Bias = c1.GetComponent<Health>().TargetBias;
 			float c2Bias = c2.GetComponent<Health>().TargetBias;
-			// if(c2.GetComponent<Health>().Allegiance) {
-				// Debug.Log(this + ".c1: " + c1.transform.position + ", .c2: " + c2.transform.position + ", diff: " + (c1.transform.position - c2.transform.position));
-				// Debug.Log(this + "vs." + c1 + ".c1Bias " + (Vector3.SqrMagnitude(this.transform.position) - Vector3.SqrMagnitude(c1.transform.position) + c1Bias));
-				// Debug.Log(this + "vs." + c1 + ".c1 " + (Vector3.SqrMagnitude(this.transform.position) - Vector3.SqrMagnitude(c1.transform.position)));
-				// Debug.Log(this + "vs." + c2 + ".c2Bias " + (Vector3.SqrMagnitude(this.transform.position) - Vector3.SqrMagnitude(c2.transform.position) + c2Bias));
-				// Debug.Log(this + "vs." + c2 + ".c2 " + (Vector3.SqrMagnitude(this.transform.position) - Vector3.SqrMagnitude(c2.transform.position)));
-			// }
 
 			return (-1) * (Vector3.Distance(this.transform.position, c2.transform.position) - (c2Bias / 3)).CompareTo
 			(Vector3.Distance(this.transform.position, c1.transform.position) - (c1Bias / 3));
