@@ -11,8 +11,8 @@ public class CharacterControl : MonoBehaviour {
 	public float magnitude;
 	public GameObject towerPrefab;
 
-	private float onMeshThreshold = 3;
-	private float onVertMeshThreshold = 1;
+	public float onMeshThreshold = 3;
+	public float onVertMeshThreshold = 1;
 	private CharacterController controller;
 	private Build playerBuildComponent;
 	private BoxCollider playerCollider;
@@ -46,8 +46,12 @@ public class CharacterControl : MonoBehaviour {
 				if(playerBuildComponent != null && towerPrefab != null) {
 
 					Vector3 playerFeetLocation = transform.position - new Vector3(0, transform.localScale.y / 2, 0);
-					if(IsAgentOnNavMesh(transform.gameObject)) {
-						playerBuildComponent.BuildStructure(playerFeetLocation, transform.rotation, towerPrefab);
+
+					Vector3 roundedLocation = new Vector3(Mathf.Round(playerFeetLocation.x), playerFeetLocation.y, Mathf.Round(playerFeetLocation.z));
+
+					// If player is close enough to navMesh
+					if(IsVectorOnNavMesh(roundedLocation)) {
+						playerBuildComponent.BuildStructure(roundedLocation, transform.rotation, towerPrefab);
 					}
 
 				}
@@ -63,21 +67,23 @@ public class CharacterControl : MonoBehaviour {
 		magnitude = Vector3.Magnitude(this.transform.position);
 	}
 
-
-	private bool IsAgentOnNavMesh(GameObject agentObject) {
+	private bool IsVectorOnNavMesh(Vector3 agentPosition) {
 		// https://stackoverflow.com/questions/45416515/check-if-disabled-navmesh-agent-player-is-on-navmesh
-		
-		Vector3 agentPosition = agentObject.transform.position;
+
+		Debug.Log(agentPosition);
+
 		UnityEngine.AI.NavMeshHit hit;
 
 		// Check for nearest point on navmesh to agent, within onMeshThreshold
 		if (UnityEngine.AI.NavMesh.SamplePosition(agentPosition, out hit, onMeshThreshold, UnityEngine.AI.NavMesh.AllAreas)) {
+			Debug.Log(hit.position);
 			// Check if the positions are vertically aligned
 			if (Mathf.Approximately(agentPosition.x, hit.position.x)
 				&& Mathf.Approximately(agentPosition.z, hit.position.z)) {
+				// Check if position is within vertical threshold of mesh
 				if((agentPosition.y - hit.position.y) <= onVertMeshThreshold) {
 					// Lastly, check if object is below navmesh
-					return agentPosition.y >= hit.position.y;
+					return agentPosition.y > hit.position.y - onVertMeshThreshold;
 				}
 			}
 		}
