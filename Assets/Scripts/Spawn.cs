@@ -6,15 +6,18 @@ public class Spawn : MonoBehaviour {
 	
 	public Vector3 spawnLocation;
 	public Vector3 spawnOffset;
-
-	private GameObject spawnGO;
-	private Entity entityComponent;
-	public bool spawned = false;
-
-	private float duration = 0.25f;
+	public float duration = 0.25f;
 
 	private float startTime;
-	private float journeyLength;
+	private GameObject spawnGO;
+	private Entity entityComponent;
+
+	[SerializeField]
+	private bool spawned = false;
+
+	public bool Spawned {
+		get { return spawned; }
+	}
 
 	void Awake() {
 
@@ -29,10 +32,9 @@ public class Spawn : MonoBehaviour {
 
 	void Start() {
 		startTime = Time.time;
-		journeyLength = Vector3.Distance(spawnOffset, spawnLocation);
 	}
 
-	void FixedUpdate () {
+	void Update () {
 		if(!spawned) {
 			if(spawnGO != null) {
 
