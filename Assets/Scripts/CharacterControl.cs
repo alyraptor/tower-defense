@@ -11,12 +11,15 @@ public class CharacterControl : MonoBehaviour {
 	public float magnitude;
 	public GameObject towerPrefab;
 
-	public float onMeshThreshold = 3;
-	public float onVertMeshThreshold = 1;
+	private float onMeshThreshold = 3f;
+	private float onVertMeshThreshold = 0.8f;
+	private Vector3 moveDirection = Vector3.zero;
 	private CharacterController controller;
 	private Build playerBuildComponent;
 	private BoxCollider playerCollider;
-	private Vector3 moveDirection = Vector3.zero;
+	private Spawn buildingSpawn;
+
+	public bool isBuilding = false;
 
 	void Awake() {
 		SetInitialReferences();
@@ -42,18 +45,29 @@ public class CharacterControl : MonoBehaviour {
 				moveDirection.y = jumpSpeed;
 			}
 
-			if (Input.GetButtonDown("Fire1")) {
-				if(playerBuildComponent != null && towerPrefab != null) {
-
-					Vector3 playerFeetLocation = transform.position - new Vector3(0, transform.localScale.y / 2, 0);
-
-					Vector3 roundedLocation = new Vector3(Mathf.Round(playerFeetLocation.x), playerFeetLocation.y, Mathf.Round(playerFeetLocation.z));
-
-					// If player is close enough to navMesh
-					if(IsVectorOnNavMesh(roundedLocation)) {
-						playerBuildComponent.BuildStructure(roundedLocation, transform.rotation, towerPrefab);
+			if (isBuilding) {
+				if (buildingSpawn != null) {
+					if(buildingSpawn.Spawned) {
+						isBuilding = false;
+						buildingSpawn = null;
 					}
+				} else {
+					isBuilding = false;
+				}
+			} else {
+				if (Input.GetButtonDown("Fire1")) {
+					if(playerBuildComponent != null && towerPrefab != null) {
 
+						Vector3 playerFeetLocation = transform.position - new Vector3(0, transform.localScale.y / 2, 0);
+
+						Vector3 roundedLocation = new Vector3(Mathf.Round(playerFeetLocation.x), playerFeetLocation.y, Mathf.Round(playerFeetLocation.z));
+
+						// If player is close enough to navMesh
+						if(IsVectorOnNavMesh(roundedLocation)) {
+							buildingSpawn = playerBuildComponent.BuildStructure(roundedLocation, transform.rotation, towerPrefab).GetComponent<Spawn>();
+							isBuilding = true;
+						}
+					}
 				}
 			}
 		} else {
@@ -70,13 +84,10 @@ public class CharacterControl : MonoBehaviour {
 	private bool IsVectorOnNavMesh(Vector3 agentPosition) {
 		// https://stackoverflow.com/questions/45416515/check-if-disabled-navmesh-agent-player-is-on-navmesh
 
-		Debug.Log(agentPosition);
-
 		UnityEngine.AI.NavMeshHit hit;
 
 		// Check for nearest point on navmesh to agent, within onMeshThreshold
 		if (UnityEngine.AI.NavMesh.SamplePosition(agentPosition, out hit, onMeshThreshold, UnityEngine.AI.NavMesh.AllAreas)) {
-			Debug.Log(hit.position);
 			// Check if the positions are vertically aligned
 			if (Mathf.Approximately(agentPosition.x, hit.position.x)
 				&& Mathf.Approximately(agentPosition.z, hit.position.z)) {
