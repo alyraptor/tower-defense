@@ -10,7 +10,10 @@ public class Spawn : MonoBehaviour {
 
 	private float startTime;
 	private GameObject spawnGO;
+	private GameObject entitiesManager;
+	private Health healthComponent;
 	private Entity entityComponent;
+
 
 	[SerializeField]
 	private bool spawned = false;
@@ -22,6 +25,21 @@ public class Spawn : MonoBehaviour {
 	void Awake() {
 
 		spawnGO = transform.gameObject;
+
+		healthComponent = spawnGO.GetComponent<Health>();
+		entitiesManager = GameObject.FindGameObjectsWithTag("EntitiesManager")[0];
+		if(entitiesManager != null) {
+			if(healthComponent != null) {
+				if(healthComponent.Allegiance) {
+					spawnGO.transform.parent = entitiesManager.transform.Find("Friendlies").gameObject.transform;
+				} else {
+					spawnGO.transform.parent = entitiesManager.transform.Find("Enemies").gameObject.transform;
+				}
+			} else {
+				spawnGO.transform.parent = entitiesManager.transform;
+			}
+		}
+
 		entityComponent = spawnGO.GetComponent<Entity>();
 
 		float spawnY = spawnGO.GetComponent<Collider>().bounds.size.y;
