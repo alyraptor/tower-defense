@@ -24,7 +24,7 @@ public class Spawn : MonoBehaviour {
 		spawnGO = transform.gameObject;
 		entityComponent = spawnGO.GetComponent<Entity>();
 
-		float spawnY = spawnGO.GetComponent<BoxCollider>().size.y;
+		float spawnY = spawnGO.GetComponent<Collider>().bounds.size.y;
 		spawnOffset = transform.position;
 		spawnLocation = transform.position + new Vector3(0, spawnY, 0);
 		
@@ -48,6 +48,8 @@ public class Spawn : MonoBehaviour {
 					spawned = true;
 				}
 			}
+		} else {
+			Destroy(this);
 		}
 	}
 }
