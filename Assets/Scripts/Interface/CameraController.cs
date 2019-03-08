@@ -1,18 +1,18 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
 	public float smoothTime = 0.15f;
     public float zoomDuration = 0.15f;
-	public float zoomMod = 2f;
-	public float minZoom = 2f;
-	public float maxZoom = 15f;
-	public float zoomDefault = 4f;
+	public float zoomMod = 1.5f;
 
     private Camera cam;
 	private Transform target;
 
+    private float minZoom = 2f;
+    private float maxZoom = 15f;
+    private float zoomDefault = 4f;
     private float zoomStartTime;
 	private float cameraHeight = 2.3f;
 	private Vector3 velocity = Vector3.zero;
