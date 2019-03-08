@@ -3,15 +3,15 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
-	public Transform target;
 	public float smoothTime = 0.15f;
     public float zoomDuration = 0.15f;
 	public float zoomMod = 2f;
 	public float minZoom = 2f;
-	public float maxZoom = 20f;
-	public float zoomDefault = 3.5f;
+	public float maxZoom = 15f;
+	public float zoomDefault = 4f;
 
     private Camera cam;
+	private Transform target;
 
     private float zoomStartTime;
 	private float cameraHeight = 2.3f;
@@ -25,6 +25,7 @@ public class CameraController : MonoBehaviour {
 	void Awake() {
         cam = gameObject.GetComponent<Camera>();
 		zoom = zoomTarget = cam.orthographicSize = zoomDefault;
+        target = GameObject.FindWithTag("Player").transform;
 	}
 
 	void Update () {
