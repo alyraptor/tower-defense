@@ -18,6 +18,7 @@ public class CharacterControl : MonoBehaviour {
 	private Build playerBuildComponent;
 	private BoxCollider playerCollider;
 	private Spawn buildingSpawn;
+	private CameraController cameraController;
 
 	public bool isBuilding = false;
 
@@ -28,6 +29,7 @@ public class CharacterControl : MonoBehaviour {
 	void SetInitialReferences() {
 		controller = GetComponent<CharacterController>();
 		playerBuildComponent = GetComponent<Build>();
+		cameraController = Camera.main.GetComponent<CameraController>();
 	}
 
 	void Update() {
@@ -40,7 +42,7 @@ public class CharacterControl : MonoBehaviour {
 			}
 
 			moveDirection *= speed;
-			
+
 			if (Input.GetButton("Jump")) {
 				moveDirection.y = jumpSpeed;
 			}
@@ -73,6 +75,10 @@ public class CharacterControl : MonoBehaviour {
 		} else {
 			moveDirection.x = (Input.GetAxis("Horizontal") * inAirSpeed);
 			moveDirection.z = (Input.GetAxis("Vertical") * inAirSpeed);
+		}
+
+        if (Input.mouseScrollDelta.y != 0f) {
+			cameraController.Zoom(Input.mouseScrollDelta.y);
 		}
 
 		moveDirection.y -= gravity * Time.deltaTime;

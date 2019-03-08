@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawn : MonoBehaviour {
-	
+
 	public Vector3 spawnLocation;
 	public Vector3 spawnOffset;
 	public float duration = 0.25f;
@@ -45,7 +45,7 @@ public class Spawn : MonoBehaviour {
 		float spawnY = spawnGO.GetComponent<Collider>().bounds.size.y;
 		spawnOffset = transform.position;
 		spawnLocation = transform.position + new Vector3(0, spawnY, 0);
-		
+
 	}
 
 	void Start() {
@@ -57,7 +57,7 @@ public class Spawn : MonoBehaviour {
 			if(spawnGO != null) {
 
 				float fracJourney = (Time.time - startTime) / duration;
-				
+
 				if (fracJourney <= 1) {
 					transform.position = new Vector3(spawnLocation.x, Mathf.SmoothStep(spawnOffset.y, spawnLocation.y, fracJourney), spawnLocation.z);
 				} else {
