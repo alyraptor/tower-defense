@@ -2,67 +2,70 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Attack : MonoBehaviour {
 
-	private LayerMask enemyLayer = 1 << 9; // Bit shift
-	private LayerMask friendlyLayer = 1 << 8;
+namespace TowerDefense {
+    public class Attack : MonoBehaviour {
 
-	private LayerMask detectionLayer;
-	private Collider[] hitColliders;
+		private LayerMask enemyLayer = 1 << 9; // Bit shift
+		private LayerMask friendlyLayer = 1 << 8;
 
-	public List<GameObject> FindTargets(bool friendly, int range) { // Get a list of targets sorted by range (nearest to farthest)
-		List<GameObject> targets = new List<GameObject>();
+		private LayerMask detectionLayer;
+		private Collider[] hitColliders;
 
-		if(friendly) {
-			detectionLayer = enemyLayer;
-		} else {
-			detectionLayer = friendlyLayer;
-		}
+		public List<GameObject> FindTargets(bool friendly, int range) { // Get a list of targets sorted by range (nearest to farthest)
+			List<GameObject> targets = new List<GameObject>();
 
-		hitColliders = Physics.OverlapSphere(this.transform.position, range, detectionLayer);
-		for(int i = 0; i < hitColliders.Length; i++) {
-			Health health = hitColliders[i].transform.GetComponent<Health>();
-			if(health != null) {
-				targets.Add(hitColliders[i].gameObject);
+			if(friendly) {
+				detectionLayer = enemyLayer;
+			} else {
+				detectionLayer = friendlyLayer;
 			}
+
+			hitColliders = Physics.OverlapSphere(this.transform.position, range, detectionLayer);
+			for(int i = 0; i < hitColliders.Length; i++) {
+				Health health = hitColliders[i].transform.GetComponent<Health>();
+				if(health != null) {
+					targets.Add(hitColliders[i].gameObject);
+				}
+			}
+
+			targets.Sort(delegate(GameObject c1, GameObject c2) {
+				float c1Bias = c1.GetComponent<Health>().TargetBias;
+				float c2Bias = c2.GetComponent<Health>().TargetBias;
+
+				return (-1) * (Vector3.Distance(this.transform.position, c2.transform.position) - (c2Bias / 3)).CompareTo
+				(Vector3.Distance(this.transform.position, c1.transform.position) - (c1Bias / 3));
+			});
+
+			return targets;
 		}
 
-		targets.Sort(delegate(GameObject c1, GameObject c2) {
-			float c1Bias = c1.GetComponent<Health>().TargetBias;
-			float c2Bias = c2.GetComponent<Health>().TargetBias;
+		public void Shoot(GameObject target, GameObject projectilePrefab) {
+			Vector3 offset = new Vector3(0, 0, 0);
+			Shoot(target, projectilePrefab, offset);
+		}
 
-			return (-1) * (Vector3.Distance(this.transform.position, c2.transform.position) - (c2Bias / 3)).CompareTo
-			(Vector3.Distance(this.transform.position, c1.transform.position) - (c1Bias / 3));
-		});
+		public void Shoot(GameObject target, GameObject projectilePrefab, Vector3 spawnOffset) {
 
-		return targets;
-	}
+			GameObject projectileGO = (GameObject)Instantiate(projectilePrefab, transform.position + spawnOffset, transform.rotation);
 
-	public void Shoot(GameObject target, GameObject projectilePrefab) {
-		Vector3 offset = new Vector3(0, 0, 0);
-		Shoot(target, projectilePrefab, offset);
-	}
+			Projectile proj = projectileGO.GetComponent<Projectile>();
+			proj.Target = target;
+		}
 
-	public void Shoot(GameObject target, GameObject projectilePrefab, Vector3 spawnOffset) {
+		public void Melee(GameObject weapon, GameObject target) {
 
-		GameObject projectileGO = (GameObject)Instantiate(projectilePrefab, transform.position + spawnOffset, transform.rotation);
+			// TODO: Perform melee animation
+			// TODO: Check hit
+			// TODO: Customize damage output
 
-		Projectile proj = projectileGO.GetComponent<Projectile>();
-		proj.Target = target;
-	}
+			DoDamage(10, target);
+		}
 
-	public void Melee(GameObject weapon, GameObject target) {
-		
-		// TODO: Perform melee animation
-		// TODO: Check hit
-		// TODO: Customize damage output
+		public void DoDamage(float amount, GameObject target) {
 
-		DoDamage(10, target);
-	}
-
-	public void DoDamage(float amount, GameObject target) {
-
-		Health targetHealth = target.GetComponent<Health>();
-		targetHealth.TakeDamage(amount);
+			Health targetHealth = target.GetComponent<Health>();
+			targetHealth.TakeDamage(amount);
+		}
 	}
 }

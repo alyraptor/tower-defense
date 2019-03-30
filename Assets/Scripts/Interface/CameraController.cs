@@ -1,66 +1,68 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+namespace TowerDefense {
+    public class CameraController : MonoBehaviour {
 
-	public float smoothTime = 0.15f;
-    public float zoomDuration = 0.15f;
-	public float zoomMod = 1.5f;
+		public float smoothTime = 0.15f;
+		public float zoomDuration = 0.15f;
+		public float zoomMod = 1.5f;
 
-    private Camera cam;
-	private Transform target;
+		private Camera cam;
+		private Transform target;
 
-    private float minZoom = 2f;
-    private float maxZoom = 15f;
-    private float zoomDefault = 4f;
-    private float zoomStartTime;
-	private float cameraHeight = 2.3f;
-	private Vector3 velocity = Vector3.zero;
+		private float minZoom = 2f;
+		private float maxZoom = 15f;
+		private float zoomDefault = 4f;
+		private float zoomStartTime;
+		private float cameraHeight = 2.3f;
+		private Vector3 velocity = Vector3.zero;
 
-	private float zoomTarget;
-	private float zoom;
-	private bool isZooming;
+		private float zoomTarget;
+		private float zoom;
+		private bool isZooming;
 
 
-	void Awake() {
-        cam = gameObject.GetComponent<Camera>();
-		zoom = zoomTarget = cam.orthographicSize = zoomDefault;
-        target = GameObject.FindWithTag("Player").transform;
-	}
+		void Awake() {
+			cam = gameObject.GetComponent<Camera>();
+			zoom = zoomTarget = cam.orthographicSize = zoomDefault;
+			target = GameObject.FindWithTag("Player").transform;
+		}
 
-	void Update () {
-		if (target != null) {
-			Vector3 goalPos = target.position;
-			goalPos.y = cameraHeight;
-			goalPos.x = target.position.x - 1f;
-			goalPos.z = target.position.z - 1f;
-			transform.position = Vector3.SmoothDamp (transform.position, goalPos, ref velocity, smoothTime);
+		void Update () {
+			if (target != null) {
+				Vector3 goalPos = target.position;
+				goalPos.y = cameraHeight;
+				goalPos.x = target.position.x - 1f;
+				goalPos.z = target.position.z - 1f;
+				transform.position = Vector3.SmoothDamp (transform.position, goalPos, ref velocity, smoothTime);
 
-            if(isZooming) {
-				float fracZoom = (Time.time - zoomStartTime) / zoomDuration;
-				if (fracZoom <= 1) {
-					cam.orthographicSize = Mathf.Lerp(zoom, zoomTarget, fracZoom);
-				} else {
-					cam.orthographicSize = zoomTarget;
-					isZooming = false;
+				if(isZooming) {
+					float fracZoom = (Time.time - zoomStartTime) / zoomDuration;
+					if (fracZoom <= 1) {
+						cam.orthographicSize = Mathf.Lerp(zoom, zoomTarget, fracZoom);
+					} else {
+						cam.orthographicSize = zoomTarget;
+						isZooming = false;
+					}
 				}
 			}
 		}
-	}
 
-	public void Zoom (float zoomChange) {
+		public void Zoom (float zoomChange) {
 
-        zoom = cam.orthographicSize;
+			zoom = cam.orthographicSize;
 
-		// Invert change in Zoom to account for ortho size being on a reverse scale
-		zoomChange = -zoomChange;
-		zoomTarget = zoomTarget + (zoomChange / zoomMod);
+			// Invert change in Zoom to account for ortho size being on a reverse scale
+			zoomChange = -zoomChange;
+			zoomTarget = zoomTarget + (zoomChange / zoomMod);
 
-		// If zoom is close to default, snap it to the default.
-		zoomTarget = Mathf.Abs(zoomTarget - zoomDefault) <= 0.25f ? zoomDefault : zoomTarget;
-		zoomTarget = zoomTarget < minZoom ? minZoom : zoomTarget > maxZoom ? maxZoom : zoomTarget;
+			// If zoom is close to default, snap it to the default.
+			zoomTarget = Mathf.Abs(zoomTarget - zoomDefault) <= 0.25f ? zoomDefault : zoomTarget;
+			zoomTarget = zoomTarget < minZoom ? minZoom : zoomTarget > maxZoom ? maxZoom : zoomTarget;
 
-        zoomStartTime = Time.time;
-		isZooming = true;
+			zoomStartTime = Time.time;
+			isZooming = true;
+		}
 	}
 }
