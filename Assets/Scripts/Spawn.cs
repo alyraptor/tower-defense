@@ -28,8 +28,9 @@ namespace TowerDefense {
 			spawnGO = transform.gameObject;
 
 			healthComponent = spawnGO.GetComponent<Health>();
-			entitiesManager = GameObject.FindGameObjectsWithTag("EntitiesManager")[0];
-			if(entitiesManager != null) {
+			GameObject[] findManager = GameObject.FindGameObjectsWithTag("EntitiesManager");
+			if(findManager != null && findManager.Length != 0) {
+				entitiesManager = GameObject.FindGameObjectsWithTag("EntitiesManager")[0];
 				if(healthComponent != null) {
 					if(healthComponent.Allegiance) {
 						spawnGO.transform.parent = entitiesManager.transform.Find("Friendlies").gameObject.transform;

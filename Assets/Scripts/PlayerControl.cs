@@ -8,10 +8,11 @@ namespace TowerDefense {
 		public float inAirSpeed = 4.0f;
 		public float jumpSpeed = 8.0f;
 		public float gravity = 40.0f;
-		public Vector3 unitSpeed;
 		public float magnitude;
+		public Vector3 unitSpeed;
 		public GameObject towerPrefab;
 
+		private bool isBuilding = false;
 		private float onMeshThreshold = 3f;
 		private float onVertMeshThreshold = 0.8f;
 		private Vector3 moveDirection = Vector3.zero;
@@ -21,7 +22,6 @@ namespace TowerDefense {
 		private BoxCollider playerCollider;
 		private Spawn buildingSpawn;
 		private CameraController cameraController;
-		public bool isBuilding = false;
 
 		void Awake() {
 			SetInitialReferences();
