@@ -6,6 +6,7 @@ namespace TowerDefense {
     public class Enemy : MonoBehaviour {
 
 		public int attackRange;
+		public float attackDistance;
 		public GameObject weapon;
 
 		private Entity entityComponent;
@@ -21,9 +22,14 @@ namespace TowerDefense {
 		void Update() {
 			if(entityComponent.enabled) {
 				FindTarget();
-				MoveToTarget(targetsList[0].transform.position);
-				if(Vector3.Distance(targetsList[0].transform.position, transform.position) < attackRange) {
-					AttackTarget(targetsList[0]);
+				Vector3 targetPosition = targetsList[0].transform.position;
+				if(Vector3.Distance(transform.position, targetPosition) >= attackDistance) {
+					MoveToTarget(targetPosition);
+					if(Vector3.Distance(targetsList[0].transform.position, transform.position) < attackRange) {
+						AttackTarget(targetsList[0]);
+					}
+				} else {
+					ArriveAtTarget();
 				}
 			}
 		}
@@ -40,6 +46,10 @@ namespace TowerDefense {
 
 		void MoveToTarget(Vector3 targetPosition) {
 			nav.SetDestination(targetPosition);
+		}
+
+		void ArriveAtTarget() {
+			nav.SetDestination(transform.position);
 		}
 
 		void AttackTarget(GameObject targetGO) {
