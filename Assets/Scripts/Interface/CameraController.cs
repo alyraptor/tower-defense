@@ -53,6 +53,15 @@ namespace TowerDefense {
 						isZooming = false;
 					}
 				}
+				if(isRotating) {
+                    float fracRotation = (Time.time - rotationStartTime) / rotationDuration;
+                    if (fracRotation <= 1) {
+                        camParent.transform.rotation = Quaternion.Slerp(rotation, rotationTarget, fracRotation);
+                    } else {
+                        camParent.transform.rotation = rotationTarget;
+                        isRotating = false;
+                    }
+				}
 			}
 		}
 
