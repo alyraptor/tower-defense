@@ -1,34 +1,32 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 namespace TowerDefense {
     public class CameraController : MonoBehaviour {
 
-		public float smoothTime = 0.15f; // Smooth camera movement
-
-		public float zoomDuration = 0.15f;
+		public float smoothTime = 0.15f; // How much to smooth camera movement (in seconds)
+		public float zoomDuration = 0.15f; // How long a zoom lasts (in seconds)
 		public float zoomMod = 1.5f;  // Dampen user input
-
-		public float rotationDuration = 5f;
+		public float rotationDuration = 5f; // How long a rotation lasts (in seconds)
 
 		private Camera cam;
 		private GameObject camParent;
-		private Transform target;
+		private Transform target; // The camera will follow this target
 
-		private float minZoom = 2f;
-		private float maxZoom = 15f;
-		private float zoomDefault = 5f;
+		private float minZoom = 2f; // Minimum the player can zoom (in Ortho camera size)
+		private float maxZoom = 15f; // Maximum the player can zoom (in Ortho camera size)
+		private float zoomDefault = 5f; // Starting Zoom level (in Ortho camera size)
 		private float cameraHeight = 1.3f;
-		private Vector3 velocity = Vector3.zero;
+		private Vector3 velocity = Vector3.zero; // Starting velocity for SmoothDamp
 
-		private float zoom;
-		private float zoomTarget;
-		private float zoomStartTime;
+		private float zoom; // Start zoom for method
+		private float zoomTarget; // End zoom for method
+		private float zoomStartTime; // Reference of time when method starts
 		private bool isZooming;
 
-		private Quaternion rotation;
-		private Quaternion rotationTarget;
-		private float rotationStartTime;
+		private Quaternion rotation; // Start rotation for method
+		private Quaternion rotationTarget; // End rotation for method
+		private float rotationStartTime; // Reference of time when method starts
 		private bool isRotating;
 
 		void Awake() {
@@ -41,7 +39,7 @@ namespace TowerDefense {
 		void Update () {
 			if (target != null) {
 				Vector3 goalPos = new Vector3(target.position.x, cameraHeight, target.position.z);
-				camParent.transform.position = Vector3.SmoothDamp (camParent.transform.position, goalPos, ref velocity, smoothTime);
+				camParent.transform.position = Vector3.SmoothDamp(camParent.transform.position, goalPos, ref velocity, smoothTime);
 
 				if(isZooming) {
 					float fracZoom = (Time.time - zoomStartTime) / zoomDuration;
@@ -86,9 +84,6 @@ namespace TowerDefense {
 
             rotation = camParent.transform.rotation;
             rotationTarget = rotation * Quaternion.Euler(new Vector3(0, rotationChange, 0)); // this adds a 90 degrees Y rotation
-
-            Debug.Log(rotation);
-            Debug.Log(rotationTarget);
 
             isRotating = true;
 		}
