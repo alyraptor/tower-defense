@@ -82,6 +82,16 @@ namespace TowerDefense {
 				cameraController.Zoom(Input.mouseScrollDelta.y);
 			}
 
+            if (Input.GetButtonDown("Rotate Left"))
+            {
+                cameraController.Rotate(-90f);
+            }
+
+            if (Input.GetButtonDown("Rotate Right"))
+            {
+                cameraController.Rotate(90f);
+            }
+
 			moveDirection.y -= gravity * Time.deltaTime;
 			controller.Move(moveDirection * Time.deltaTime);
 			unitSpeed = controller.velocity;
