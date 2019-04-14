@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 namespace TowerDefense {
@@ -9,6 +9,7 @@ namespace TowerDefense {
 		public float zoomMod = 1.5f;
 
 		private Camera cam;
+		private GameObject camParent;
 		private Transform target;
 
 		private float minZoom = 2f;
@@ -25,6 +26,7 @@ namespace TowerDefense {
 
 		void Awake() {
 			cam = gameObject.GetComponent<Camera>();
+			camParent = cam.transform.parent.gameObject;
 			zoom = zoomTarget = cam.orthographicSize = zoomDefault;
 			target = GameObject.FindWithTag("Player").transform;
 		}
