@@ -17,6 +17,7 @@ namespace TowerDefense {
 		private float minZoom = 2f;
 		private float maxZoom = 15f;
 		private float zoomDefault = 5f;
+		private float cameraHeight = 1.3f;
 		private Vector3 velocity = Vector3.zero;
 
 		private float zoom;
@@ -38,11 +39,8 @@ namespace TowerDefense {
 
 		void Update () {
 			if (target != null) {
-				Vector3 goalPos = target.position;
-				goalPos.y = cameraHeight;
-				goalPos.x = target.position.x - 1f;
-				goalPos.z = target.position.z - 1f;
-				transform.position = Vector3.SmoothDamp (transform.position, goalPos, ref velocity, smoothTime);
+				Vector3 goalPos = new Vector3(target.position.x, cameraHeight, target.position.z);
+				camParent.transform.position = Vector3.SmoothDamp (camParent.transform.position, goalPos, ref velocity, smoothTime);
 
 				if(isZooming) {
 					float fracZoom = (Time.time - zoomStartTime) / zoomDuration;
