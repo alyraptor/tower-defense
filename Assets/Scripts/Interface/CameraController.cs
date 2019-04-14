@@ -64,6 +64,8 @@ namespace TowerDefense {
 
 		public void Zoom (float zoomChange) { // Ease-in/Ease-out Zoom
 
+			isZooming = true;
+			zoomStartTime = Time.time;
 			zoom = cam.orthographicSize;
 
 			// Invert change in Zoom to account for ortho size being on a reverse scale
@@ -73,19 +75,15 @@ namespace TowerDefense {
 			// If zoom is close to default, snap it to the default.
 			zoomTarget = Mathf.Abs(zoomTarget - zoomDefault) <= 0.25f ? zoomDefault : zoomTarget;
 			zoomTarget = zoomTarget < minZoom ? minZoom : zoomTarget > maxZoom ? maxZoom : zoomTarget;
-
-			zoomStartTime = Time.time;
-			isZooming = true;
 		}
 
 		public void Rotate (float rotationChange) {
 
-            rotationStartTime = Time.time;
-
-            rotation = camParent.transform.rotation;
-            rotationTarget = rotation * Quaternion.Euler(new Vector3(0, rotationChange, 0)); // this adds a 90 degrees Y rotation
-
             isRotating = true;
+            rotationStartTime = Time.time;
+            rotation = camParent.transform.rotation;
+
+            rotationTarget = rotation * Quaternion.Euler(new Vector3(0, rotationChange, 0));
 		}
 	}
 }
