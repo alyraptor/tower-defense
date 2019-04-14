@@ -1,12 +1,13 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace TowerDefense {
     public class CameraController : MonoBehaviour {
 
-		public float smoothTime = 0.15f;
+		public float smoothTime = 0.15f; // Smooth camera movement
+
 		public float zoomDuration = 0.15f;
-		public float zoomMod = 1.5f;
+		public float zoomMod = 1.5f;  // Dampen user input
 
 		public float rotationDuration = 5f;
 
@@ -63,7 +64,7 @@ namespace TowerDefense {
 			}
 		}
 
-		public void Zoom (float zoomChange) {
+		public void Zoom (float zoomChange) { // Ease-in/Ease-out Zoom
 
 			zoom = cam.orthographicSize;
 
