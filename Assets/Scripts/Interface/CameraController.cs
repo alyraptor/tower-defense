@@ -71,5 +71,18 @@ namespace TowerDefense {
 			zoomStartTime = Time.time;
 			isZooming = true;
 		}
+
+		public void Rotate (float rotationChange) {
+
+            rotationStartTime = Time.time;
+
+            rotation = camParent.transform.rotation;
+            rotationTarget = rotation * Quaternion.Euler(new Vector3(0, rotationChange, 0)); // this adds a 90 degrees Y rotation
+
+            Debug.Log(rotation);
+            Debug.Log(rotationTarget);
+
+            isRotating = true;
+		}
 	}
 }
