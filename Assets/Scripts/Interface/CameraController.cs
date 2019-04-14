@@ -8,21 +8,26 @@ namespace TowerDefense {
 		public float zoomDuration = 0.15f;
 		public float zoomMod = 1.5f;
 
+		public float rotationDuration = 5f;
+
 		private Camera cam;
 		private GameObject camParent;
 		private Transform target;
 
 		private float minZoom = 2f;
 		private float maxZoom = 15f;
-		private float zoomDefault = 4f;
-		private float zoomStartTime;
-		private float cameraHeight = 2.3f;
+		private float zoomDefault = 5f;
 		private Vector3 velocity = Vector3.zero;
 
-		private float zoomTarget;
 		private float zoom;
+		private float zoomTarget;
+		private float zoomStartTime;
 		private bool isZooming;
 
+		private Quaternion rotation;
+		private Quaternion rotationTarget;
+		private float rotationStartTime;
+		private bool isRotating;
 
 		void Awake() {
 			cam = gameObject.GetComponent<Camera>();
