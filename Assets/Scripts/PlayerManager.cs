@@ -4,6 +4,9 @@ using UnityEngine;
 namespace TowerDefense {
 	public class PlayerManager : MonoBehaviour {
 
+        public enum ControlStyle { NW, NE, N };
+        public ControlStyle controlStyle;
+
 		public float speed = 5.0f;
 		public float inAirSpeed = 4.0f;
 		public float jumpSpeed = 8.0f;
@@ -15,6 +18,7 @@ namespace TowerDefense {
 		private float onMeshThreshold = 3f;
 		private float onVertMeshThreshold = 0.8f;
 		private Vector3 moveDirection = Vector3.zero;
+        private float directionMod;
         private Quaternion playerRotation;
 
 		private CharacterController controller;
@@ -43,6 +47,15 @@ namespace TowerDefense {
 		private void PlayerMove() {
 
             if (controller.isGrounded) {
+
+                if(controlStyle == ControlStyle.NE) {
+                    directionMod = 90;
+                } else if(controlStyle == ControlStyle.N) {
+                    directionMod = 45;
+                } else {
+                    directionMod = 0;
+                }
+
                 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
                 if (moveDirection.magnitude >= 1) { // Don't normalize if below 1, to allow for slow movement.
