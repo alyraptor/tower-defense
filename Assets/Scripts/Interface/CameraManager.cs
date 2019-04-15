@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 namespace TowerDefense {
-    public class CameraController : MonoBehaviour {
+    public class CameraManager : MonoBehaviour {
 
         private Camera cam;
         private GameObject camParent;

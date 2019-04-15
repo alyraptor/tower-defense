@@ -2,7 +2,7 @@
 using UnityEngine;
 
 namespace TowerDefense {
-	public class PlayerControl : MonoBehaviour {
+	public class PlayerManager : MonoBehaviour {
 
 		public float speed = 5.0f;
 		public float inAirSpeed = 4.0f;
@@ -20,7 +20,7 @@ namespace TowerDefense {
 		private Build playerBuildComponent;
 		private BoxCollider playerCollider;
 		private Spawn buildingSpawn;
-		private CameraController cameraController;
+		private CameraManager cameraController;
 		public bool isBuilding = false;
 
 		void Awake() {
@@ -30,7 +30,7 @@ namespace TowerDefense {
 		void SetInitialReferences() {
 			controller = GetComponent<CharacterController>();
 			playerBuildComponent = GetComponent<Build>();
-			cameraController = Camera.main.GetComponent<CameraController>();
+			cameraController = Camera.main.GetComponent<CameraManager>();
 		}
 
 		void Update() {
