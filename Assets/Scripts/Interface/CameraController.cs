@@ -24,9 +24,10 @@ namespace TowerDefense {
         private float zoomStartTime; // Reference of time when method starts
         private bool isZooming;
 
-        private Quaternion rotation; // Start rotation for method
+        private Quaternion currentRotation; // Start rotation for method
         private Quaternion rotationTarget; // End rotation for method
         private float rotationStartTime; // Reference of time when method starts
+		private float rotationTargetAngle;
         private bool isRotating;
 
         void Awake() {
@@ -53,7 +54,7 @@ namespace TowerDefense {
                 if (isRotating) {
                     float fracRotation = (Time.time - rotationStartTime) / rotationDuration;
                     if (fracRotation <= 1) {
-                        camParent.transform.rotation = Quaternion.Slerp(rotation, rotationTarget, fracRotation);
+                        camParent.transform.rotation = Quaternion.Slerp(currentRotation, rotationTarget, fracRotation);
                     } else {
                         camParent.transform.rotation = rotationTarget;
                         isRotating = false;
@@ -64,8 +65,6 @@ namespace TowerDefense {
 
         public void Zoom(float zoomChange) { // Ease-in/Ease-out Zoom
 
-            isZooming = true;
-            zoomStartTime = Time.time;
             zoom = cam.orthographicSize;
 
             // Invert change in Zoom to account for ortho size being on a reverse scale
@@ -75,15 +74,19 @@ namespace TowerDefense {
             // If zoom is close to default, snap it to the default.
             zoomTarget = Mathf.Abs(zoomTarget - zoomDefault) <= 0.25f ? zoomDefault : zoomTarget;
             zoomTarget = zoomTarget < minZoom ? minZoom : zoomTarget > maxZoom ? maxZoom : zoomTarget;
+
+            zoomStartTime = Time.time;
+			isZooming = true;
         }
 
         public void Rotate(float rotationChange) {
 
-            isRotating = true;
-            rotationStartTime = Time.time;
-            rotation = camParent.transform.rotation;
+            currentRotation = camParent.transform.rotation;
+			rotationTargetAngle += rotationChange;
+            rotationTarget = Quaternion.Euler(new Vector3(0, rotationTargetAngle, 0));
 
-            rotationTarget = rotation * Quaternion.Euler(new Vector3(0, rotationChange, 0));
+            rotationStartTime = Time.time;
+            isRotating = true;
         }
     }
 }
