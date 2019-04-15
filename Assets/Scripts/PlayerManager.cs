@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 namespace TowerDefense {
@@ -15,6 +15,7 @@ namespace TowerDefense {
 		private float onMeshThreshold = 3f;
 		private float onVertMeshThreshold = 0.8f;
 		private Vector3 moveDirection = Vector3.zero;
+        private Quaternion playerRotation;
 
 		private CharacterController controller;
 		private Build playerBuildComponent;
@@ -34,7 +35,6 @@ namespace TowerDefense {
 		}
 
 		void Update() {
-
             PlayerMove();
             PlayerBuild();
             PlayerCamera();
@@ -44,10 +44,14 @@ namespace TowerDefense {
 
             if (controller.isGrounded) {
                 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-                moveDirection = transform.TransformDirection(moveDirection);
 
                 if (moveDirection.magnitude >= 1) { // Don't normalize if below 1, to allow for slow movement.
                     moveDirection.Normalize(); // Normalize values so that diagonal movement is as fast as regular.
+                }
+
+                if (moveDirection.magnitude != 0) { // Don't let the object rotate or reset by itself
+                    playerRotation = Quaternion.LookRotation(moveDirection);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, playerRotation, 0.1f);
                 }
 
                 moveDirection *= speed;
