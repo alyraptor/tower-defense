@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace TowerDefense {
@@ -26,7 +26,7 @@ namespace TowerDefense {
 		private BoxCollider playerCollider;
 		private Spawn buildingSpawn;
 		private CameraManager cameraController;
-		public bool isBuilding = false;
+		private bool isBuilding = false;
 
 		void Awake() {
 			SetInitialReferences();
