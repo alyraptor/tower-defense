@@ -4,28 +4,27 @@ using UnityEngine;
 namespace TowerDefense {
     public class CameraController : MonoBehaviour {
 
-        public float smoothTime = 0.15f; // How much to smooth camera movement (in seconds)
-        public float zoomDuration = 0.15f; // How long a zoom lasts (in seconds)
-        public float zoomMod = 1.5f;  // Dampen user input
-        public float rotationDuration = 5f; // How long a rotation lasts (in seconds)
-
         private Camera cam;
         private GameObject camParent;
         private Transform target; // The camera will follow this target
 
-        private float minZoom = 2f; // Minimum the player can zoom (in Ortho camera size)
-        private float maxZoom = 15f; // Maximum the player can zoom (in Ortho camera size)
-        private float zoomDefault = 5f; // Starting Zoom level (in Ortho camera size)
+        private float smoothTime = 0.15f; // How much to smooth camera movement (in seconds)
         private float cameraHeight = 1.3f;
         private Vector3 velocity = Vector3.zero; // Starting velocity for SmoothDamp
 
         private float zoom; // Start zoom for method
         private float zoomTarget; // End zoom for method
         private float zoomStartTime; // Reference of time when method starts
+		private float zoomDuration = 0.15f; // How long a zoom lasts (in seconds)
+        private float zoomMod = 1.5f;  // Dampen user input
+        private float minZoom = 2f; // Minimum the player can zoom (in Ortho camera size)
+        private float maxZoom = 15f; // Maximum the player can zoom (in Ortho camera size)
+        private float zoomDefault = 5f; // Starting Zoom level (in Ortho camera size)
         private bool isZooming;
 
         private Quaternion currentRotation; // Start rotation for method
         private Quaternion rotationTarget; // End rotation for method
+        private float rotationDuration = 0.15f; // How long a rotation lasts (in seconds)
         private float rotationStartTime; // Reference of time when method starts
 		private float rotationTargetAngle;
         private bool isRotating;
