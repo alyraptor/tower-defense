@@ -34,63 +34,77 @@ namespace TowerDefense {
 		}
 
 		void Update() {
-			if (controller.isGrounded) {
-				moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-				moveDirection = transform.TransformDirection(moveDirection);
 
-				if(moveDirection.magnitude >= 1) { // Don't normalize if below 1, to allow for slow movement.
-					moveDirection.Normalize(); // Normalize values so that diagonal movement is as fast as regular.
-				}
+            PlayerMove();
+            PlayerBuild();
+            PlayerCamera();
+		}
 
-				moveDirection *= speed;
+		private void PlayerMove() {
 
-				if (Input.GetButton("Jump")) {
-					moveDirection.y = jumpSpeed;
-				}
+            if (controller.isGrounded) {
+                moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                moveDirection = transform.TransformDirection(moveDirection);
 
-				if (isBuilding) {
-					if (buildingSpawn != null) {
-						if(buildingSpawn.Spawned) {
-							isBuilding = false;
-							buildingSpawn = null;
-						}
-					} else {
-						isBuilding = false;
-					}
-				} else {
-					if (Input.GetButtonDown("Fire1")) {
-						if(playerBuildComponent != null && towerPrefab != null) {
+                if (moveDirection.magnitude >= 1) { // Don't normalize if below 1, to allow for slow movement.
+                    moveDirection.Normalize(); // Normalize values so that diagonal movement is as fast as regular.
+                }
 
-							Vector3 playerFeetLocation = transform.position - new Vector3(0, transform.localScale.y / 2, 0);
+                moveDirection *= speed;
 
-							Vector3 roundedLocation = new Vector3(Mathf.Round(playerFeetLocation.x), playerFeetLocation.y, Mathf.Round(playerFeetLocation.z));
+                if (Input.GetButton("Jump")) {
+                    moveDirection.y = jumpSpeed;
+                }
 
-							// If player is close enough to navMesh
-							if(IsVectorOnNavMesh(roundedLocation)) {
-								buildingSpawn = playerBuildComponent.BuildStructure(roundedLocation, transform.rotation, towerPrefab).GetComponent<Spawn>();
-								isBuilding = true;
-							}
-						}
-					}
-				}
-			} else {
-				moveDirection.x = (Input.GetAxis("Horizontal") * inAirSpeed);
-				moveDirection.z = (Input.GetAxis("Vertical") * inAirSpeed);
-			}
-
-			if (Input.mouseScrollDelta.y != 0f) {
-				cameraController.Zoom(Input.mouseScrollDelta.y);
-			}
-
-            if (Input.GetButtonDown("Rotate"))
-            {
-                cameraController.Rotate(90f * Input.GetAxis("Rotate"));
+            } else {
+                moveDirection.x = (Input.GetAxis("Horizontal") * inAirSpeed);
+                moveDirection.z = (Input.GetAxis("Vertical") * inAirSpeed);
             }
 
-			moveDirection.y -= gravity * Time.deltaTime;
-			controller.Move(moveDirection * Time.deltaTime);
-			unitSpeed = controller.velocity;
-			magnitude = Vector3.Magnitude(this.transform.position);
+            moveDirection.y -= gravity * Time.deltaTime;
+            controller.Move(moveDirection * Time.deltaTime);
+            unitSpeed = controller.velocity;
+            magnitude = Vector3.Magnitude(this.transform.position);
+		}
+
+		private void PlayerCamera() {
+            if (Input.mouseScrollDelta.y != 0f) {
+                cameraController.Zoom(Input.mouseScrollDelta.y);
+            }
+            if (Input.GetButtonDown("Rotate")) {
+                cameraController.Rotate(90f * Input.GetAxis("Rotate"));
+            }
+		}
+
+		private void PlayerBuild() {
+
+            if (controller.isGrounded) {
+                if (isBuilding) {
+                    if (buildingSpawn != null) {
+                        if (buildingSpawn.Spawned) {
+                            isBuilding = false;
+                            buildingSpawn = null;
+                        }
+                    } else {
+                        isBuilding = false;
+                    }
+                } else {
+                    if (Input.GetButtonDown("Fire1")) {
+                        if (playerBuildComponent != null && towerPrefab != null) {
+
+                            Vector3 playerFeetLocation = transform.position - new Vector3(0, transform.localScale.y / 2, 0);
+
+                            Vector3 roundedLocation = new Vector3(Mathf.Round(playerFeetLocation.x), playerFeetLocation.y, Mathf.Round(playerFeetLocation.z));
+
+                            // If player is close enough to navMesh
+                            if (IsVectorOnNavMesh(roundedLocation)) {
+                                buildingSpawn = playerBuildComponent.BuildStructure(roundedLocation, transform.rotation, towerPrefab).GetComponent<Spawn>();
+                                isBuilding = true;
+                            }
+                        }
+                    }
+                }
+            }
 		}
 
 		private bool IsVectorOnNavMesh(Vector3 agentPosition) {
