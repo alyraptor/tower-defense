@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 namespace TowerDefense {
@@ -86,10 +86,10 @@ namespace TowerDefense {
 
 		private void PlayerCamera() {
             if (Input.mouseScrollDelta.y != 0f) {
-                cameraController.Zoom(Input.mouseScrollDelta.y);
+                cameraManager.Zoom(Input.mouseScrollDelta.y);
             }
             if (Input.GetButtonDown("Rotate")) {
-                cameraController.Rotate(90f * Input.GetAxis("Rotate"));
+                cameraManager.Rotate(90f * Input.GetAxis("Rotate"));
             }
 		}
 
