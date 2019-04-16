@@ -96,5 +96,37 @@ namespace TowerDefense {
             rotationStartTime = Time.time;
             isRotating = true;
         }
+
+        private Direction Orient (Direction dir, float rotationDirection = 1) {
+            // Give new cardinal direction based on Direction input and change
+            bool derbyDirection = rotationDirection > 0 ? false : true;
+            if(dir == Direction.N) {
+                if(derbyDirection) {
+                    return Direction.W;
+                } else {
+                    return Direction.E;
+                }
+            } else if (dir == Direction.E) {
+                if (derbyDirection) {
+                    return Direction.N;
+                } else {
+                    return Direction.S;
+                }
+            } else if (dir == Direction.S) {
+                if (derbyDirection) {
+                    return Direction.E;
+                } else {
+                    return Direction.W;
+                }
+            } else if (dir == Direction.W) {
+                if (derbyDirection) {
+                    return Direction.S;
+                } else {
+                    return Direction.N;
+                }
+            } else {
+                return Direction.N;
+            }
+        }
     }
 }
