@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace TowerDefense {
@@ -79,6 +79,7 @@ namespace TowerDefense {
             } else {
                 moveDirection.x = (Input.GetAxis("Horizontal") * inAirSpeed);
                 moveDirection.z = (Input.GetAxis("Vertical") * inAirSpeed);
+                moveDirection = Quaternion.Euler(new Vector3(0, directionMod, 0)) * moveDirection;
             }
 
             moveDirection.y -= gravity * Time.deltaTime;
