@@ -90,7 +90,8 @@ namespace TowerDefense {
         public void Rotate(float rotationChange) {
 
             currentRotation = camParent.transform.rotation;
-			rotationTargetAngle += rotationChange;
+            cameraDirection =  Orient(cameraDirection, rotationChange);
+			rotationTargetAngle = (float)cameraDirection;
             rotationTarget = Quaternion.Euler(new Vector3(0, rotationTargetAngle, 0));
 
             rotationStartTime = Time.time;
