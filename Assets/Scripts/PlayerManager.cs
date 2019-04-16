@@ -25,7 +25,7 @@ namespace TowerDefense {
 		private Build playerBuildComponent;
 		private BoxCollider playerCollider;
 		private Spawn buildingSpawn;
-		private CameraManager cameraController;
+		private CameraManager cameraManager;
 		private bool isBuilding = false;
 
 		void Awake() {
@@ -35,7 +35,7 @@ namespace TowerDefense {
 		void SetInitialReferences() {
 			controller = GetComponent<CharacterController>();
 			playerBuildComponent = GetComponent<Build>();
-			cameraController = Camera.main.GetComponent<CameraManager>();
+			cameraManager = Camera.main.GetComponent<CameraManager>();
 		}
 
 		void Update() {
