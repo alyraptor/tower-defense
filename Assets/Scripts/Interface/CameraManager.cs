@@ -4,6 +4,15 @@ using UnityEngine;
 namespace TowerDefense {
     public class CameraManager : MonoBehaviour {
 
+        public enum Direction { N = 0, E = 90, S = 180, W = 270 };
+
+        [SerializeField]
+        private Direction cameraDirection;
+
+        public Direction CameraDirection {
+            get { return cameraDirection; }
+        }
+
         private Camera cam;
         private GameObject camParent;
         private Transform target; // The camera will follow this target
