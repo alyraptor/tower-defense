@@ -4,6 +4,15 @@ using UnityEngine;
 namespace TowerDefense {
     public class CameraManager : MonoBehaviour {
 
+        public enum Direction { N = 0, E = 90, S = 180, W = 270 };
+
+        [SerializeField]
+        private Direction cameraDirection;
+
+        public Direction CameraDirection {
+            get { return cameraDirection; }
+        }
+
         private Camera cam;
         private GameObject camParent;
         private Transform target; // The camera will follow this target
@@ -81,11 +90,44 @@ namespace TowerDefense {
         public void Rotate(float rotationChange) {
 
             currentRotation = camParent.transform.rotation;
-			rotationTargetAngle += rotationChange;
+            cameraDirection =  Orient(cameraDirection, rotationChange);
+			rotationTargetAngle = (float)cameraDirection;
             rotationTarget = Quaternion.Euler(new Vector3(0, rotationTargetAngle, 0));
 
             rotationStartTime = Time.time;
             isRotating = true;
+        }
+
+        private Direction Orient (Direction dir, float rotationDirection = 1) {
+            // Give new cardinal direction based on Direction input and change
+            bool derbyDirection = rotationDirection > 0 ? false : true;
+            if(dir == Direction.N) {
+                if(derbyDirection) {
+                    return Direction.W;
+                } else {
+                    return Direction.E;
+                }
+            } else if (dir == Direction.E) {
+                if (derbyDirection) {
+                    return Direction.N;
+                } else {
+                    return Direction.S;
+                }
+            } else if (dir == Direction.S) {
+                if (derbyDirection) {
+                    return Direction.E;
+                } else {
+                    return Direction.W;
+                }
+            } else if (dir == Direction.W) {
+                if (derbyDirection) {
+                    return Direction.S;
+                } else {
+                    return Direction.N;
+                }
+            } else {
+                return Direction.N;
+            }
         }
     }
 }

@@ -25,7 +25,7 @@ namespace TowerDefense {
 		private Build playerBuildComponent;
 		private BoxCollider playerCollider;
 		private Spawn buildingSpawn;
-		private CameraManager cameraController;
+		private CameraManager cameraManager;
 		private bool isBuilding = false;
 
 		void Awake() {
@@ -35,7 +35,7 @@ namespace TowerDefense {
 		void SetInitialReferences() {
 			controller = GetComponent<CharacterController>();
 			playerBuildComponent = GetComponent<Build>();
-			cameraController = Camera.main.GetComponent<CameraManager>();
+			cameraManager = Camera.main.GetComponent<CameraManager>();
 		}
 
 		void Update() {
@@ -56,7 +56,10 @@ namespace TowerDefense {
                     directionMod = 0;
                 }
 
+                directionMod += (float)cameraManager.CameraDirection;
+
                 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                moveDirection = Quaternion.Euler(new Vector3(0, directionMod, 0)) * moveDirection;
 
                 if (moveDirection.magnitude >= 1) { // Don't normalize if below 1, to allow for slow movement.
                     moveDirection.Normalize(); // Normalize values so that diagonal movement is as fast as regular.
@@ -76,6 +79,7 @@ namespace TowerDefense {
             } else {
                 moveDirection.x = (Input.GetAxis("Horizontal") * inAirSpeed);
                 moveDirection.z = (Input.GetAxis("Vertical") * inAirSpeed);
+                moveDirection = Quaternion.Euler(new Vector3(0, directionMod, 0)) * moveDirection;
             }
 
             moveDirection.y -= gravity * Time.deltaTime;
@@ -86,10 +90,10 @@ namespace TowerDefense {
 
 		private void PlayerCamera() {
             if (Input.mouseScrollDelta.y != 0f) {
-                cameraController.Zoom(Input.mouseScrollDelta.y);
+                cameraManager.Zoom(Input.mouseScrollDelta.y);
             }
             if (Input.GetButtonDown("Rotate")) {
-                cameraController.Rotate(90f * Input.GetAxis("Rotate"));
+                cameraManager.Rotate(90f * Input.GetAxis("Rotate"));
             }
 		}
 
