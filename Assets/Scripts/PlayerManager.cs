@@ -56,7 +56,10 @@ namespace TowerDefense {
                     directionMod = 0;
                 }
 
+                directionMod += (float)cameraManager.CameraDirection;
+
                 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                moveDirection = Quaternion.Euler(new Vector3(0, directionMod, 0)) * moveDirection;
 
                 if (moveDirection.magnitude >= 1) { // Don't normalize if below 1, to allow for slow movement.
                     moveDirection.Normalize(); // Normalize values so that diagonal movement is as fast as regular.
