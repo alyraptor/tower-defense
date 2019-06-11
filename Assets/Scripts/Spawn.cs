@@ -26,10 +26,12 @@ namespace TowerDefense {
 		void Awake() {
 
 			spawnGO = transform.gameObject;
-
 			healthComponent = spawnGO.GetComponent<Health>();
-			entitiesManager = GameObject.FindGameObjectsWithTag("EntitiesManager")[0];
-			if(entitiesManager != null) {
+
+			GameObject[] entManArray = GameObject.FindGameObjectsWithTag("EntitiesManager");
+
+			if(entManArray.Length > 0) {
+				entitiesManager = entManArray[0];
 				if(healthComponent != null) {
 					if(healthComponent.Allegiance) {
 						spawnGO.transform.parent = entitiesManager.transform.Find("Friendlies").gameObject.transform;
@@ -63,7 +65,11 @@ namespace TowerDefense {
 						transform.position = new Vector3(spawnLocation.x, Mathf.SmoothStep(spawnOffset.y, spawnLocation.y, fracJourney), spawnLocation.z);
 					} else {
 						transform.position = spawnLocation;
-						entityComponent.enabled = true;
+						
+						if(healthComponent != null) {
+							entityComponent.enabled = true;
+						}
+						
 						spawned = true;
 					}
 				}
