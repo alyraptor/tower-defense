@@ -114,11 +114,11 @@ namespace TowerDefense {
                         if (playerBuildComponent != null && towerPrefab != null) {
 
                             Vector3 playerFeetLocation = transform.position - new Vector3(0, transform.localScale.y / 2, 0);
-
                             Vector3 roundedLocation = new Vector3(Mathf.Round(playerFeetLocation.x), playerFeetLocation.y, Mathf.Round(playerFeetLocation.z));
 
                             // If player is close enough to navMesh
                             if (IsVectorOnNavMesh(roundedLocation)) {
+
                                 buildingSpawn = playerBuildComponent.BuildStructure(roundedLocation, transform.rotation, towerPrefab).GetComponent<Spawn>();
                                 isBuilding = true;
                             }

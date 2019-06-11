@@ -8,8 +8,8 @@ namespace TowerDefense {
 		public GameObject BuildStructure(Vector3 spawnLocation, Quaternion spawnRotation, GameObject spawnPrefab) {
 
 			float spawnY = spawnPrefab.GetComponent<BoxCollider>().size.y;
-			Vector3 spawnOffset = spawnLocation - new Vector3(0, spawnY / 2, 0);
-			spawnLocation = spawnLocation + new Vector3(0, spawnY / 2, 0);
+			Vector3 spawnOffset = spawnLocation - new Vector3(0, spawnY, 0);
+			spawnLocation = spawnLocation + new Vector3(0, spawnY, 0);
 
 			return (GameObject)Instantiate(spawnPrefab, spawnOffset, spawnRotation);
 		}
