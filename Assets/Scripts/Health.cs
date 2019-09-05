@@ -44,9 +44,11 @@ namespace TowerDefense {
 		}
 
 		void SetInitialReferences() {
-			rendy = gameObject.GetComponentsInChildren<MeshRenderer>()[0];
-			normalColor = rendy.material.color;
-
+			rendsArray = gameObject.GetComponentsInChildren<MeshRenderer>();
+			if (rendsArray.Length > 0) {
+				rendy = rendsArray[0];
+				normalColor = rendy.material.color;
+			}
 			currentHealth = maxHealth;
 		}
 
