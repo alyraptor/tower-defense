@@ -16,7 +16,7 @@ namespace TowerDefense {
 		public GameObject towerPrefab;
 
 		private float onMeshThreshold = 3f;
-		private float onVertMeshThreshold = 0.8f;
+		private float onVertMeshThreshold = 0.5f;
 		private Vector3 moveDirection = Vector3.zero;
         private float directionMod;
         private Quaternion playerRotation;
